@@ -2,8 +2,48 @@
 {% block title %} Post {{ post.IID }} {% endblock %}
 
 {% block body %}
-    <h1>{{ post.TITLE }}</h1><h3>{{ post.DATE }}</h3><br>
-    <p style="text-align:center">{{ post.PD }}</p><br>
-    <img src="data:{{ mimetype }};base64,{{img}}">
+    <div style="padding-top: 4rem; padding-bottom: 1rem;">
+	<h1 style="font-size: 70px; padding-left: 20px; padding-bottom: 10px; text-align: center;">{{post.TITLE}}</h1>
+	
+	<div class="container">
+		<div class="row row-cols-1 row-cols-xl-2">
+			<div  class="col"><img src="data:{{ mimetype }};base64,{{img}}" class="img-fluid border border-3 border-dark" style="width: 500px; border-width: 500px; border-radius: 10px;"></div>
+            <div  class="col g-3 border border-3 border-dark rounded-3" style="background-color: #b6b8b6;;">
+				<h6 style="font-size: 60px; padding-left: 20px;">Nutrition Info</h6>
+				<ul style="font-size: 30px; padding-left: 70px;">
+					{% for line in post.NUTRI.splitlines() %}
+                        <li>{{line}}</li>
+                    {% endfor %}
+				</ul>
+			</div>
+
+		</div>
+	</div>				
+	
+	<div class="container" style="padding-top: 30px;">
+		<div class="row">
+			<div class="col g-2 border border-3 border-dark rounded-3" style="background-color: #b6b8b6; margin-right: 25px;">
+				<h6 style="font-size: 60px; padding-left: 20px;">Ingredients</h6>
+				<ul style="padding-left: 60px; font-size: 30px;">
+					{% for line in post.ING.splitlines() %}
+                        <li>{{line}}</li>
+                    {% endfor %}
+				</ul>
+			</div>
+
+				<div  class="col g-2 border border-3 border-dark rounded-3" style="background-color: #b6b8b6; padding-right: 1rem;">
+				<h6 style="font-size: 60px; padding-left: 20px;">Preparations</h6>
+				<ol style="padding-left: 60px; font-size: 30px; text-align: justify;">
+					{% for line in post.RECIPE.splitlines() %}
+                        <li>{{line}}</li>
+                    {% endfor %}				
+				</ol>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+</div>
 
 {% endblock %}
