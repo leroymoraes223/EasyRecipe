@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %} Register {% endblock %}
+
+{% block body%}
+<div style="text-align: center;">
+    <h1 >Register</h1>
+    <form method="post" action="#">
+        <input type="text" name="nm" placeholder="Username"><br>
+        <input type="password" name="pass" placeholder="Password"><br>
+        <input type="email" name="email" placeholder="abc@xyz.com">
+        <input type="submit" value="Register!">
+    </form>
+</div>
+{% endblock %}

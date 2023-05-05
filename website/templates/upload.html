@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Upload
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid bg-dark " style="padding-top: 2rem;padding-bottom: 2rem;">
+        <div class="container-fluid border-1 border border-black rounded-5" style="padding-bottom: 2rem;">
+            <h3 class="text-light text-center">Submit Post</h3>
+            <form action="/upload" method="POST" enctype="multipart/form-data"><br>
+                <div class="mb-3">
+                    <label for="title" class="form-label text-white">Title</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                </div>
+
+                <div class="mb-3">
+                    <label for="FILE" class="form-label text-white">Upload Thumbnail</label>
+                    <input class="form-control form-control-lg" id="FILE" name="img" type="file">
+                </div>
+                <textarea name="desc" placeholder="Description"></textarea><br>
+                <textarea name="ing" placeholder="Ingredients"></textarea><br>
+                <textarea name="nutri" placeholder="Nutrition Info"></textarea><br>
+                <textarea name="recipe" placeholder="Preparation Steps"></textarea><br>
+                <input type="submit" value="submit"><br>
+            </form>
+        </div>
+    </div>
+{% endblock %}

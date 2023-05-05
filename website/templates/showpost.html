@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %} Post {{ post.IID }} {% endblock %}
+
+{% block body %}
+    <h1>{{ post.TITLE }}</h1><h3>{{ post.DATE }}</h3><br>
+    <p style="text-align:center">{{ post.PD }}</p><br>
+    <img src="data:{{ mimetype }};base64,{{img}}">
+
+{% endblock %}
