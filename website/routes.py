@@ -1,6 +1,6 @@
 import base64
-
-from flask import request, render_template, redirect, Blueprint
+from .forms import UserRegistraionForm
+from flask import request, render_template, redirect, Blueprint, flash, url_for
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -59,20 +59,20 @@ def login():
 
 @page.route("/register", methods=["POST", "GET"])
 def register():
-    if request.method == "POST":
-        username = request.form.get('nm')
-        password = request.form.get('pass')
-        email = request.form.get('email')
-        name_check = user.query.filter_by(USERNAME=username).first()
-        email_check = user.query.filter_by(EMAIL=email).first()
-        if name_check is None and email_check is None:
-            new_user = user(username, generate_password_hash(password, method="sha256"), email)
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect("/")
-        return redirect("/register"), 400
-    else:
-        return render_template("register.html")
+    form = UserRegistraionForm()
+    if form.validate_on_submit():
+        new_user = user(form.username.data,
+         generate_password_hash(form.password2.data, method="sha256"),
+          form.email.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("User Successfully Created","success")
+        return redirect("/login")
+    if form.errors != {}:
+        for error in form.errors.values():
+            flash(error[0],"error")
+        return redirect(url_for("page.register"))
+    return render_template("register.html", form=form)
 
 
 @login_required
