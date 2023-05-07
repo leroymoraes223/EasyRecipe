@@ -1,5 +1,5 @@
 import base64
-from .forms import UserRegistraionForm
+from .forms import UserRegistraionForm, UserLoginForm
 from flask import request, render_template, redirect, Blueprint, flash, url_for
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -46,15 +46,14 @@ def upload():
 
 @page.route("/login", methods=["POST", "GET"])
 def login():
-    if request.method == "POST":
-        username = request.form.get("nm")
-        password = request.form.get("pass")
-
-        check = user.query.filter_by(USERNAME=username).first()
-        if check is not None and check_password_hash(check.PASSWORD, password):
-            login_user(check, remember=True)
-            return redirect("/")
-    return render_template("login.html")
+    form = UserLoginForm()
+    if form.validate_on_submit():
+        login_user(form.user, remember=True)
+        return redirect("/upload")
+    if form.errors != {}:
+        for error in form.errors.values():
+            flash(error[0],"error")
+    return render_template("login.html",form=form)
 
 
 @page.route("/register", methods=["POST", "GET"])

@@ -2,10 +2,26 @@
 {% block title %} Login {% endblock %}
 
 {% block body %}
-    <h1>Login</h1><br>
+<body class="bg-dark" style="padding-top: 3rem;">
+    <div class="container rounded-5 border-black bg-light" style="padding-bottom: 3rem;">
+    <div class="container text-center">
+       <h1 class="text-center text-dark " style="padding-top: 1rem;">Register</h1>
+    </div>
+    <div class="container bg-light">
     <form action="#" method="post">
-        <input type="text" name="nm" placeholder="Username">
-        <input type="password" name="pass" placeholder="Password">
-        <input type="submit" class="btn btn-primary" value="submit">
+       <div class="container bg-light">
+    <form method="post" action="#">
+       {{form.csrf_token}}
+       <div class="mb-3">
+          {{form.username.label(for="Username",class="form-label")}}
+          {{form.username(id="Username",placeholder="Enter Your Username", class="form-control")}}
+       </div>
+       <div class="mb-3">
+          {{form.password.label(for="password",class="form-label")}}
+          {{form.password(placeholder="Enter Your Password",id="password",class="form-control form-label")}}
+       </div>
+       <div class="container-fluid">
+          {{form.submit(class="btn btn-primary btn-lg")}}
+       </div>
     </form>
 {% endblock %}
