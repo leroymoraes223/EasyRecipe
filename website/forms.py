@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from werkzeug.security import check_password_hash
-from wtforms import StringField, TextAreaField, EmailField, PasswordField, SubmitField
-from wtforms.validators import EqualTo, Length, DataRequired, Email, ValidationError
+from wtforms import StringField, TextAreaField, EmailField, PasswordField, SubmitField,SelectField
+from flask_wtf.file import FileField, FileAllowed,FileRequired
+from wtforms.validators import InputRequired, EqualTo, Length, DataRequired, Email, ValidationError
 from .models import user
 
 class UserRegistraionForm(FlaskForm):
@@ -16,9 +17,9 @@ class UserRegistraionForm(FlaskForm):
         if email:
             raise ValidationError("This email is already in Use")
 
-    username = StringField(label="Username", validators=[Length(min=6), DataRequired()])
-    email = EmailField(label="Email", validators=[Email(), DataRequired()])
-    password1 = PasswordField(label="Password", validators=[Length(min=6), DataRequired()])
+    username = StringField(label="Username", validators=[Length(min=6), InputRequired()])
+    email = EmailField(label="Email", validators=[Email(), InputRequired()])
+    password1 = PasswordField(label="Password", validators=[Length(min=6), InputRequired()])
     password2 = PasswordField(label="Confirm Password", validators=[EqualTo("password1")])
     submit = SubmitField(label="Create Account")
 
@@ -44,3 +45,15 @@ class UserLoginForm(FlaskForm):
     username = StringField(label="Username")
     password = PasswordField(label="Password")
     submit = SubmitField(label="Login")
+
+class PostUploadForm(FlaskForm):
+    title = StringField(label="Title",validators=[InputRequired(message="Title Is Required")])
+    img = FileField(label="Upload Thumbnail",
+     validators=[FileRequired(message="A Thumnail is Required"),
+            FileAllowed(["jpg", "jpeg", "jfif", "pjpeg", "pjp", "png"],
+            message="Please Upload only Images.(.png,.jpg,jpeg)")])
+    desc = StringField(label="Description",validators=[InputRequired(message="Description is Required")])
+    ing = TextAreaField(label="Ingredients")
+    nutri = TextAreaField(label="Nutrition")
+    recipe = TextAreaField(label="Preparation Steps")
+    submit = SubmitField(label="Post")

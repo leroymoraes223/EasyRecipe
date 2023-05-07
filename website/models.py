@@ -28,6 +28,7 @@ class post(db.Model):
     RECIPE = db.Column("RECIPE", db.Text)
     DATE = db.Column("DATE", db.DateTime(timezone=True), default=func.now())
     UID = db.Column("UID", db.Integer, db.ForeignKey(user.UID))
+    img = db.Relationship("img")
 
     def __init__(self, TITLE, PD, ING, NUTRI, RECIPE, UID):
         self.TITLE = TITLE
@@ -43,8 +44,10 @@ class img(db.Model):
     bufferdata = db.Column("bufferdata", db.Text, unique=True, nullable=False)
     NAME = db.Column("NAME", db.Text, nullable=False)
     mimetype = db.Column("mimetype", db.Text, nullable=False)
+    PID = db.Column("PID",db.Integer, db.ForeignKey(post.PID))
 
-    def __init__(self, NAME, bufferdata, mimetype):
+    def __init__(self, NAME, bufferdata, mimetype, PID):
         self.NAME = NAME
         self.bufferdata = bufferdata
         self.mimetype = mimetype
+        self.PID = PID

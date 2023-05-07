@@ -1,5 +1,5 @@
 import base64
-from .forms import UserRegistraionForm, UserLoginForm
+from .forms import PostUploadForm ,UserRegistraionForm, UserLoginForm
 from flask import request, render_template, redirect, Blueprint, flash, url_for
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,24 +24,21 @@ def run():
 @page.route('/upload', methods=["POST", "GET"])
 @login_required
 def upload():
-    if request.method == "POST":
-        pic = request.files["img"]
-        title = request.form["title"].strip()
-        desc = request.form["desc"].strip()
-        ing = request.form["ing"]
-        nutri = request.form["nutri"]
-        recipe = request.form["recipe"]
-
-        new_post = post(title, desc, ing, nutri, recipe, current_user.UID)
+    form = PostUploadForm()
+    if form.validate_on_submit():
+        pic = form.img.data
+        new_post = post(form.title.data, form.desc.data, form.ing.data, form.nutri.data, form.recipe.data, current_user.UID)
+        db.session.add(new_post)
+        db.session.commit()
         new_img = img(secure_filename(pic.filename),
                       base64.b64encode(pic.read()).decode('utf-8'),
-                      mimetype=pic.mimetype)
+                      mimetype=pic.mimetype,
+                      PID=new_post.PID)
         db.session.add(new_img)
-        db.session.add(new_post)
         db.session.commit()
         return redirect("/")
     else:
-        return render_template("upload.html")
+        return render_template("upload.html",form=form)
 
 
 @page.route("/login", methods=["POST", "GET"])
@@ -49,7 +46,7 @@ def login():
     form = UserLoginForm()
     if form.validate_on_submit():
         login_user(form.user, remember=True)
-        return redirect("/upload")
+        return redirect("/")
     if form.errors != {}:
         for error in form.errors.values():
             flash(error[0],"error")
@@ -83,9 +80,9 @@ def logout():
 
 @page.route("/post/<int:_id>")
 def display_post(_id):
-    _img = img.query.filter_by(IID=_id).first()
+    _img = img.query.filter_by(PID=_id).first()
     _post = post.query.filter_by(PID=_id).first()
-    if _img is None:
-        return "No IMg with THat id", 404
-    else:
+    if _post:
         return render_template("showpost.html", img=_img.bufferdata, mimetype=_img.mimetype, post=_post)
+    else:
+        return "No post with THat id", 404

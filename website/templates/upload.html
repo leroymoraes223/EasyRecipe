@@ -1,28 +1,59 @@
 {% extends "layout.html" %}
+{%block style%}
 
+{%endblock%}
 {% block title %}
     Upload
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid bg-dark " style="padding-top: 2rem;padding-bottom: 2rem;">
+    <div class="container-fluid bg-dark " style="padding-top: 4rem;padding-bottom: 5rem;">
         <div class="container-fluid border-1 border border-black rounded-5" style="padding-bottom: 2rem;">
             <h3 class="text-light text-center">Submit Post</h3>
             <form action="/upload" method="POST" enctype="multipart/form-data"><br>
-                <div class="mb-3">
-                    <label for="title" class="form-label text-white">Title</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="Title">
-                </div>
+                {{form.csrf_token()}}
+                
 
-                <div class="mb-3">
-                    <label for="FILE" class="form-label text-white">Upload Thumbnail</label>
-                    <input class="form-control form-control-lg" id="FILE" name="img" type="file">
+                        <div class="mb-3">
+                            {{form.title.label(for="title",class="form-label text-white")}}
+                            {{form.title(class="form-control",id="title",placeholder="Title")}}
+                        </div>
+
+                        <div class="input-group mb-3" style="padding-bottom: 0.5rem;">
+                            {{form.desc.label(class="input-group-text")}}
+                            {{form.desc(class="form-control",aria_label="Description",placeholder="Description")}}
+                        </div>
+
+                        <div class="mb-3">
+                            {{form.img.label(for="FILE",class="form-label text-white")}}
+                            {{form.img(class="form-control form-control-lg",id="FILE")}}
+                        </div>
+
+                    <div class="row row-cols-lg-3 row-cols-md-1">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            {{form.ing.label(class="input-group-text")}}
+                            {{form.ing(class="form-control",aria_label="Ingredients",placeholder="Ingredients")}}
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            {{form.nutri.label(class="input-group-text")}}
+                            {{form.nutri(class="form-control",aria_label="Nutrition",placeholder="Nutrition Info")}}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            {{form.recipe.label(class="input-group-text")}}
+                            {{form.recipe(class="form-control",aria_label="Preparation Steps",placeholder="Preparation Steps")}}
+                        </div>
+                    </div>
                 </div>
-                <textarea name="desc" placeholder="Description"></textarea><br>
-                <textarea name="ing" placeholder="Ingredients"></textarea><br>
-                <textarea name="nutri" placeholder="Nutrition Info"></textarea><br>
-                <textarea name="recipe" placeholder="Preparation Steps"></textarea><br>
-                <input type="submit" value="submit"><br>
+                <br>
+                <div class="container-fluid btn-lg">
+                    {{form.submit(class="btn btn-primary btn-lg btn")}}
+                </div>
             </form>
         </div>
     </div>
