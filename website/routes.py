@@ -12,7 +12,7 @@ page = Blueprint("page", __name__)
 
 @page.route('/')
 def hello_world():
-    return 'Hello World!'
+    return render_template("homepage.html")
 
 
 @page.before_request
@@ -78,11 +78,37 @@ def logout():
     return redirect("/")
 
 
-@page.route("/post/<int:_id>")
-def display_post(_id):
-    _img = img.query.filter_by(PID=_id).first()
-    _post = post.query.filter_by(PID=_id).first()
+@page.route("/post/<Title>")
+def display_post(Title):
+    _post = post.query.filter_by(TITLE=Title).first()
     if _post:
+        _img = img.query.filter_by(PID=_post.PID).first()
         return render_template("showpost.html", img=_img.bufferdata, mimetype=_img.mimetype, post=_post)
     else:
         return "No post with THat id", 404
+
+@login_required
+@page.route("/account")
+def user_profile():
+    return render_template("account.html",user=current_user)
+
+
+@page.route("/profile/<username>")
+def  view_profile(username):
+    if current_user.USERNAME == username:
+        return redirect(url_for("user_profile.html"))
+    User = user.query.filter_by(USERNAME=username).first()
+    if User:
+        return render_template("user_posts.html",user=User)
+    flash("No such User found","error")
+    return render_template("/")
+
+@page.route("/del_post/<PID>", methods=["POST"])
+def del_post(PID):
+    del_post = post.query.filter_by(PID=PID).first()
+    if del_post.UID == current_user.UID:
+        post.query.filter_by(PID=PID).delete()
+        db.session.commit()
+    else:
+        flash("You are not the owner of that Post","error")
+    return redirect("/account")
