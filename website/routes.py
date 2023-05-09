@@ -36,6 +36,7 @@ def upload():
                       PID=new_post.PID)
         db.session.add(new_img)
         db.session.commit()
+        flash("Post Sumbitted Successfully","success")
         return redirect("/")
     else:
         return render_template("upload.html",form=form)
@@ -96,7 +97,7 @@ def user_profile():
 @page.route("/profile/<username>")
 def  view_profile(username):
     if current_user.USERNAME == username:
-        return redirect(url_for("user_profile.html"))
+        return redirect("/account")
     User = user.query.filter_by(USERNAME=username).first()
     if User:
         return render_template("user_posts.html",user=User)
@@ -108,7 +109,9 @@ def del_post(PID):
     del_post = post.query.filter_by(PID=PID).first()
     if del_post.UID == current_user.UID:
         post.query.filter_by(PID=PID).delete()
+        img.query.filter_by(PID=PID).delete()
         db.session.commit()
+        flash("Post Deleted Successfully","Success")
     else:
         flash("You are not the owner of that Post","error")
     return redirect("/account")

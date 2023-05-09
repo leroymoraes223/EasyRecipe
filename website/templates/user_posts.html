@@ -11,12 +11,12 @@
     {% for post in user.post %}
     <div class="col">
         <div class="card h-100">
-            <img src="data:{{ post.img[0].mimetype }};base64,{{post.img[0].bufferdata}}" class="card-img-top border-1" alt="..." style="width: 100%;height: 15vw;object-fit: cover;">
+            <a href="/post/{{post.TITLE}}"><img src="data:{{ post.img[0].mimetype }};base64,{{post.img[0].bufferdata}}" class="card-img-top border-1" alt="..." style="width: 100%;height: 15vw;object-fit: cover;"></a>
             <div class="card-body">
                 <h5 class="card-title text-center"><b>{{post.TITLE}}</b></h5>
-                <h6 class="card-subtitle mb-2">{{post.PD}}</h6>
+                <h6 class="card-subtitle mb-2">{{post.PD}}</h6> 
                 <p class="card-text text-end"><small class="text-body-secondary">Uploaded on {{post.DATE.date()}}</small></p>
-                <a class="stretched-link" href="/post/{{post.TITLE}}"></a>  
+                 
             </div>
         </div>
     </div>
