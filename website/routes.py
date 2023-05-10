@@ -1,5 +1,5 @@
 import base64
-from .forms import PostUploadForm ,UserRegistraionForm, UserLoginForm
+from .forms import PostUploadForm ,UserRegistraionForm, UserLoginForm, UserdataEditForm
 from flask import request, render_template, redirect, Blueprint, flash, url_for
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -106,8 +106,8 @@ def  view_profile(username):
 
 @page.route("/del_post/<PID>", methods=["POST"])
 def del_post(PID):
-    del_post = post.query.filter_by(PID=PID).first()
-    if del_post.UID == current_user.UID:
+    del_post = post.query.filter_by(PID=PID,UID=current_user.UID).first()
+    if del_post:
         post.query.filter_by(PID=PID).delete()
         img.query.filter_by(PID=PID).delete()
         db.session.commit()
@@ -115,3 +115,24 @@ def del_post(PID):
     else:
         flash("You are not the owner of that Post","error")
     return redirect("/account")
+
+@page.route("/profile/edit",methods=["GET","POST"])
+def edit_profile():
+    form = UserdataEditForm(user=current_user)
+    if form.validate_on_submit():
+        current_user.USERNAME = form.username.data
+        current_user.EMAIL = form.email.data
+        Logout = False
+        print(form.password2.data)
+        if form.password2.data != "":
+            current_user.PASSWORD = generate_password_hash(form.password2.data)
+            Logout = True
+        db.session.commit()
+        flash("Profile Updated Successfully", "success")
+        if Logout:
+            return redirect("/logout")
+        return redirect("/profile/edit")
+    if form.errors != {}:
+        for error in form.errors.values():
+            flash(error[0],"error")
+    return render_template("editProfile.html",form=form)
