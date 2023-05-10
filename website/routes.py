@@ -116,6 +116,7 @@ def del_post(PID):
         flash("You are not the owner of that Post","error")
     return redirect("/account")
 
+@login_required(func)
 @page.route("/profile/edit",methods=["GET","POST"])
 def edit_profile():
     form = UserdataEditForm(user=current_user)
