@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <form method="POST" action="/search">
+        <input type="text" name="query">
+        <input type="submit" value="Search">
+    </form>
+</div>
+
+
+<div class="container">
+    <br>
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1">
+    {% for post in posts %}
+    <div class="col">
+        <div class="card h-100">
+            <a href="/post/{{post.TITLE}}"><img src="data:{{ post.img[0].mimetype }};base64,{{post.img[0].bufferdata}}" class="card-img-top border-1" alt="..." style="width: 100%;height: 15vw;object-fit: cover;"></a>
+            <div class="card-body">
+                <h5 class="card-title text-center"><b>{{post.TITLE}}</b></h5>
+                <h6 class="card-subtitle mb-2">{{post.PD}}</h6> 
+                <p class="card-text text-end"><small class="text-body-secondary">Uploaded on {{post.DATE.date()}}</small></p>
+                 
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+    </div>
+</div>
+{% endblock %}

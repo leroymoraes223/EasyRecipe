@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from . import db
 from .models import user, post, img
+from thefuzz import fuzz,process
 
 page = Blueprint("page", __name__)
 
@@ -64,4 +65,16 @@ def del_post(PID):
         flash("You are not the owner of that Post","error")
     return redirect("/account")
 
-
+@page.route("/search",methods=["POST"])
+def search():
+    search = request.form.get("query")
+    posts = post.query.filter_by()
+    query_results_list = []
+    matched_posts = []
+    for i in posts:
+        query_results_list.append(i.TITLE)
+    search_results = process.extract(search, query_results_list)
+    for title,ratio in search_results:
+        Post = post.query.filter_by(TITLE=title).first()
+        matched_posts.append(Post)
+    return render_template("search.html",posts=matched_posts)
