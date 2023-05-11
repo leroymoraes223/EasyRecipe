@@ -17,8 +17,9 @@ def start_app():
 
     # Blueprints
     from .routes import page
+    from .account import account
     app.register_blueprint(page)
-
+    app.register_blueprint(account)
     # Database Configuration
     from .models import user, post, img
     db.init_app(app)
