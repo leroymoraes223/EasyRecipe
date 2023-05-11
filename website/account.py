@@ -24,7 +24,7 @@ def register():
     if form.errors != {}:
         for error in form.errors.values():
             flash(error[0],"error")
-        return redirect(url_for("page.register"))
+        return redirect(url_for("account.register"))
     return render_template("register.html", form=form)
 
 
