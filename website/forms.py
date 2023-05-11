@@ -9,19 +9,19 @@ from .models import user
 class UserRegistraionForm(FlaskForm):
 
     def validate_username(self, input):
-        username = user.query.filter_by(USERNAME=input.data).first()
+        username = user.query.filter_by(USERNAME=str(input.data)).first()
         if username:
             raise ValidationError("This Username is already in Use")
 
     def validate_email(self, input):
-        email = user.query.filter_by(EMAIL=input.data).first()
+        email = user.query.filter_by(EMAIL=str(input.data)).first()
         if email:
             raise ValidationError("This email is already in Use")
 
     username = StringField(label="Username", validators=[Length(min=6), InputRequired()])
     email = EmailField(label="Email", validators=[Email(), InputRequired()])
     password1 = PasswordField(label="Password", validators=[Length(min=6), InputRequired()])
-    password2 = PasswordField(label="Confirm Password", validators=[EqualTo(("password1","Passwords Do Not Match"))])
+    password2 = PasswordField(label="Confirm Password", validators=[EqualTo("password1","Passwords Do Not Match")])
     submit = SubmitField(label="Create Account")
 
 
