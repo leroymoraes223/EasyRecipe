@@ -26,7 +26,7 @@ def start_app():
 
     # LoginManager
     loginManager = LoginManager()
-    loginManager.login_view = "page.login"
+    loginManager.login_view = "account.login"
     loginManager.init_app(app)
 
     @loginManager.user_loader
