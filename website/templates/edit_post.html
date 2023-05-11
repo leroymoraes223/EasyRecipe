@@ -1,0 +1,22 @@
+{%extends "layout.html"%}
+
+{%block title%} Edit {%endblock%}
+
+{%block body%}
+<body class="bg-dark" style="padding-top: 3rem;">
+    <div class="container rounded-5 border-black bg-light" style="padding-bottom: 3rem;">
+    <div class="container text-center">
+        <h1 class="text-center text-dark">Edit Post</h1>
+    </div>
+    
+        <div class="container bg-light">
+            <form method = "post" action="#">
+                <div class="mb-3">
+                    {{form.title.label(for="title", class="form-label")}}
+                    {{form.title(for="title", class="form-control")}}
+                </div>
+            </form>
+        </div>
+    </div>
+    
+{%endblock%}

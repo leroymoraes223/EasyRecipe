@@ -1,5 +1,5 @@
 import base64
-from .forms import PostUploadForm ,UserRegistraionForm, UserLoginForm, UserdataEditForm
+from .forms import PostUploadForm ,UserRegistraionForm, UserLoginForm, UserdataEditForm, PostEditForm
 from flask import request, render_template, redirect, Blueprint, flash, url_for
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -79,3 +79,15 @@ def search():
         Post = post.query.filter_by(TITLE=title).first()
         matched_posts.append(Post)
     return render_template("search.html",posts=matched_posts)
+
+@login_required
+@page.route("/post/edit/", methods=["GET", "POST"])
+def edit_post():
+    pid = request.args.get("PID")
+    Post = post.query.filter_by(PID=pid, UID=current_user.UID)
+    form = PostEditForm()
+    if Post:
+        return render_template("edit_post.html", form=form)
+    else:
+        flash("post doesn't belong to you", "error")
+        return render_template("/")
