@@ -5,6 +5,7 @@ from flask_wtf.file import FileField, FileAllowed,FileRequired
 from wtforms.validators import InputRequired, EqualTo, Length, DataRequired, Email, ValidationError, Optional
 from .models import user
 
+
 class UserRegistraionForm(FlaskForm):
 
     def validate_username(self, input):
@@ -57,6 +58,7 @@ class PostUploadForm(FlaskForm):
     nutri = TextAreaField(label="Nutrition")
     recipe = TextAreaField(label="Preparation Steps")
     submit = SubmitField(label="Post")
+
 
 class UserdataEditForm(FlaskForm):
 

@@ -65,6 +65,7 @@ def del_post(PID):
         flash("You are not the owner of that Post","error")
     return redirect("/account")
 
+
 @page.route("/search",methods=["POST"])
 def search():
     search = request.form.get("query")
